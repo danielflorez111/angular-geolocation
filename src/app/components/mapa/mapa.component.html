@@ -1,0 +1,32 @@
+<mat-card>
+
+  <mat-card-content *ngIf="location">
+
+    <agm-map [latitude]="lat" [longitude]="lng" [zoom]="17">
+
+      <agm-circle [latitude]="location.lat" [longitude]="location.lng" [radius]="100">
+
+      </agm-circle>
+
+      <agm-marker (dragEnd)="bla($event)" [markerDraggable]="true" [latitude]="location.lat" [longitude]="location.lng">
+
+      </agm-marker>
+
+      <agm-marker *ngFor="let device of devices; let i = index" [latitude]="device.lat" [longitude]="device.lng">
+
+        <agm-info-window>
+          <strong> titulo </strong>
+          <p> desc </p>
+          <div>
+            <button mat-raised-button color="primary">Editar</button>
+            <button (click)="borrarMarcador(i)" mat-raised-button color="warn">Borrar</button>
+          </div>
+        </agm-info-window>
+
+      </agm-marker>
+
+    </agm-map>
+
+  </mat-card-content>
+
+</mat-card>
