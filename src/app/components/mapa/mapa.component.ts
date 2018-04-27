@@ -64,18 +64,14 @@ export class MapaComponent implements OnInit {
   }
 
   bla(event) {
+    this.setLocation(event.coords);
+
     this.devices.map((device) => {
       let deviceLocation = new google.maps.LatLng(device.lat, device.lng);
       let currentLocation = new google.maps.LatLng(this.location.lat, this.location.lng);
       device.distance = google.maps.geometry.spherical.computeDistanceBetween(deviceLocation, currentLocation);
     });
-    this.setLocation(event.coords);
     console.log(this.devices);
-
-    // let coord1 = new google.maps.LatLng(6.223604, -75.572741);
-    // let coord2 = new google.maps.LatLng(6.223646, -75.575402);
-    // let distance = google.maps.geometry.spherical.computeDistanceBetween(coord1, coord2);
-    // console.log("distance", distance);
   }
 
 }
