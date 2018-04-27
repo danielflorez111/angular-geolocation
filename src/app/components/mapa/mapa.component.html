@@ -8,7 +8,7 @@
 
       </agm-circle>
 
-      <agm-marker (dragEnd)="bla($event)" [markerDraggable]="true" [latitude]="location.lat" [longitude]="location.lng">
+      <agm-marker (dragEnd)="dragEnd($event)" [markerDraggable]="true" [latitude]="location.lat" [longitude]="location.lng">
 
       </agm-marker>
 
@@ -17,10 +17,10 @@
         <agm-info-window>
           <strong> titulo </strong>
           <p> desc </p>
-          <div>
+          <!-- <div>
             <button mat-raised-button color="primary">Editar</button>
             <button (click)="borrarMarcador(i)" mat-raised-button color="warn">Borrar</button>
-          </div>
+          </div> -->
         </agm-info-window>
 
       </agm-marker>

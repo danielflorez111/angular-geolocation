@@ -22,28 +22,10 @@ export class MapaComponent implements OnInit {
   constructor(public snackBar: MatSnackBar, private _deviceService: DeviceService) {
     this.devices = this._deviceService.getDevices();
     this.setLocation();
+    //this.calculateDistances();
   }
 
   ngOnInit() {
-  }
-
-  agregarMarcador(event) {
-    const coords: { lat: number, lng: number } = event.coords;
-    const nuevoMarcador = new Marcador(coords.lat, coords.lng);
-    this.marcadores.push(nuevoMarcador);
-
-    this.guardarStorage();
-    this.snackBar.open('Marcador agregado', 'Cerrar', { duration: 1000 });
-  }
-
-  borrarMarcador(i: number) {
-    this.marcadores.splice(i, 1);
-    this.guardarStorage();
-    this.snackBar.open('Marcador borrado', 'Cerrar', { duration: 1000 });
-  }
-
-  guardarStorage() {
-    localStorage.setItem('marcadores', JSON.stringify(this.marcadores));
   }
 
   setLocation(location?: ILocation) {
@@ -53,7 +35,6 @@ export class MapaComponent implements OnInit {
           lat: position.coords.latitude,
           lng: position.coords.longitude
         };
-        console.log("jaja", this.location);
       });
     } else {
       this.location = {
@@ -63,15 +44,18 @@ export class MapaComponent implements OnInit {
     }
   }
 
-  bla(event) {
+  dragEnd(event) {
     this.setLocation(event.coords);
+    this.calculateDistances();
+    console.log(this.devices);
+  }
 
+  calculateDistances() {
     this.devices.map((device) => {
       let deviceLocation = new google.maps.LatLng(device.lat, device.lng);
       let currentLocation = new google.maps.LatLng(this.location.lat, this.location.lng);
       device.distance = google.maps.geometry.spherical.computeDistanceBetween(deviceLocation, currentLocation);
     });
-    console.log(this.devices);
   }
 
 }
