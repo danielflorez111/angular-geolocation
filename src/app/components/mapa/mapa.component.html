@@ -12,7 +12,7 @@
 
       </agm-marker>
 
-      <agm-marker *ngFor="let device of devices; let i = index" [latitude]="device.lat" [longitude]="device.lng">
+      <agm-marker *ngFor="let device of nearbyDevices; let i = index" [latitude]="device.lat" [longitude]="device.lng">
 
         <agm-info-window>
           <strong> titulo </strong>
@@ -30,3 +30,10 @@
   </mat-card-content>
 
 </mat-card>
+
+
+<br>
+<br>
+<pre>
+  {{ farDevices | json }}
+</pre>
