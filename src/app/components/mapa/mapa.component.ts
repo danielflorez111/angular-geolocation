@@ -5,6 +5,7 @@ import { DeviceService } from '../../services/device.service';
 import { IDevice } from '../../interfaces/device.interface';
 import { ILocation } from '../../interfaces/location.interface';
 import { MapsAPILoader } from '@agm/core';
+import { MatTableDataSource } from '@angular/material';
 declare var google: any;
 
 
@@ -18,19 +19,23 @@ export class MapaComponent implements OnInit {
   devices: IDevice[] = [];
   nearbyDevices: IDevice[] = [];
   farDevices: IDevice[] = [];
+  radius: number = 100;
+  radiusOpts = [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000];
   location: ILocation;
-  marcadores: Marcador[] = []
+  dataSource: MatTableDataSource<IDevice>;
+  displayedColumns = ['title', 'lat', 'lng', 'distance'];
   lat: number = 6.2250704;
   lng: number = -75.57404319999999;
 
   constructor(public snackBar: MatSnackBar, private _deviceService: DeviceService, private mapsAPILoader: MapsAPILoader) {
     this.devices = this._deviceService.getDevices();
-    //this.setLocation();
 
     this.location = {
       lat: this.lat,
       lng: this.lng
     };
+
+    this.setLocation();
   }
 
   ngOnInit() {
@@ -71,8 +76,14 @@ export class MapaComponent implements OnInit {
   }
 
   updateDevices() {
-    this.nearbyDevices = this.devices.filter(device => device.distance <= 100);
-    this.farDevices = this.devices.filter(device => device.distance > 100)
+    this.nearbyDevices = this.devices.filter(device => device.distance <= this.radius);
+    this.farDevices = this.devices.filter(device => device.distance > this.radius);
+    this.dataSource = new MatTableDataSource(this.farDevices);
+  }
+
+  onChange(radius) {
+    this.radius = radius;
+    this.updateDevices();
   }
 
 }
