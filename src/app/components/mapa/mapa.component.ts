@@ -76,6 +76,7 @@ export class MapaComponent implements OnInit {
   }
 
   dragEnd(event) {
+    console.log(event);
     this.setLocation(event.coords);
     this.calculateDistances();
     this.updateDevices();
