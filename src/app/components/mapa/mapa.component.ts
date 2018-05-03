@@ -9,7 +9,6 @@ import { MatTableDataSource } from '@angular/material';
 import { blueMarker } from '../../shared/utils';
 declare var google: any;
 
-
 @Component({
   selector: 'app-mapa',
   templateUrl: './mapa.component.html',
@@ -59,6 +58,7 @@ export class MapaComponent implements OnInit {
   updateDevices() {
     this.nearbyDevices = this.devices.filter(device => device.distance <= this.radius);
     this.farDevices = this.devices.filter(device => device.distance > this.radius);
+    this.farDevices.sort((a, b) => a.distance - b.distance);
     this.dataSource = new MatTableDataSource(this.farDevices);
   }
 

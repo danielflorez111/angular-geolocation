@@ -1,31 +1,23 @@
 import { Injectable } from '@angular/core';
 import { IDevice } from "../interfaces/device.interface";
+import * as faker from 'faker';
 
 @Injectable()
 export class DeviceService {
 
-  private devices: IDevice[] = [
-    {
-      id: 1,
-      title: 'Mercados del Rio',
-      lat: 6.226702,
-      lng: -75.575423
-    },
-    {
-      id: 2,
-      title: 'Centro de la moda',
-      lat: 6.222734,
-      lng: -75.574972
-    },
-    {
-      id: 3,
-      title: 'Gabriel Garcia Marquez',
-      lat: 6.219673,
-      lng: -75.571464
-    }
-  ];
+  private devices: IDevice[] = [];
 
-  constructor() { }
+  constructor() {
+    for (let i = 0; i < 30; i++) {
+      this.devices.push({
+        id: i,
+        title: faker.address.streetName(),
+        lat: parseFloat(faker.finance.amount(6.218037, 6.232031, 6)),
+        lng: parseFloat(faker.finance.amount(-75.580770, -75.568368, 6)),
+        active: faker.random.boolean()
+      });
+    }
+  }
 
   getDevices() {
     return this.devices;

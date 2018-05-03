@@ -2,7 +2,7 @@
 
   <mat-card-content *ngIf="location">
 
-    <agm-map [latitude]="lat" [longitude]="lng" [zoom]="17">
+    <agm-map [latitude]="location.lat" [longitude]="location.lng" [zoom]="16">
 
       <agm-circle [latitude]="location.lat" [longitude]="location.lng" [radius]="radius">
 
@@ -15,8 +15,7 @@
       <agm-marker *ngFor="let device of nearbyDevices; let i = index" [latitude]="device.lat" [longitude]="device.lng" [iconUrl]="icon">
 
         <agm-info-window>
-          <strong> titulo </strong>
-          <p> desc </p>
+          <strong> {{ device.title }} </strong>
           <!-- <div>
             <button mat-raised-button color="primary">Editar</button>
             <button (click)="borrarMarcador(i)" mat-raised-button color="warn">Borrar</button>
