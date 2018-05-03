@@ -20,3 +20,8 @@ mat-card-content {
 .title {
     color: #333398;
 }
+
+/* mat-table {
+    height: 400px;
+    overflow-y: auto;
+} */

@@ -95,4 +95,12 @@ export class MapaComponent implements OnInit {
     return promise;
   }
 
+  toggle(event) {
+    if (event.checked) {
+      this.dataSource = new MatTableDataSource(this.nearbyDevices);
+    } else {
+      this.dataSource = new MatTableDataSource(this.farDevices);
+    }
+  }
+
 }

@@ -17,6 +17,7 @@ export class DeviceService {
         active: faker.random.boolean()
       });
     }
+    console.log(this.devices);
   }
 
   getDevices() {

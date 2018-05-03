@@ -43,6 +43,8 @@
       </div>
 
       <div>
+        <mat-slide-toggle (change)="toggle($event)" color="primary">Slide me!</mat-slide-toggle>
+
         <h2 class="title">Non access devices</h2>
 
         <mat-table #table [dataSource]="dataSource">
