@@ -30,18 +30,32 @@ export class MapaComponent implements OnInit {
   constructor(public snackBar: MatSnackBar, private _deviceService: DeviceService, private mapsAPILoader: MapsAPILoader) {
     this.devices = this._deviceService.getDevices();
 
-    this.location = {
-      lat: this.lat,
-      lng: this.lng
-    };
+    // this.location = {
+    //   lat: this.lat,
+    //   lng: this.lng
+    // };
 
-    this.setLocation();
+    //this.setLocation();
+
+    // this.test().then((position) => {
+    //   console.log(position);
+    // }).catch((err) => {
+    //   console.log(err);
+    // });
+
+    // this.getPosition().then((position) => {
+    //   console.log("Esta es", this.location);
+    // });
+
   }
 
   ngOnInit() {
     this.mapsAPILoader.load().then(() => {
-      this.calculateDistances();
-      this.updateDevices();
+      this.getPosition().then((position) => {
+        console.log("Esta es", this.location);
+        this.calculateDistances();
+        this.updateDevices();
+      });
     });
   }
 
@@ -84,6 +98,35 @@ export class MapaComponent implements OnInit {
   onChange(radius) {
     this.radius = radius;
     this.updateDevices();
+  }
+
+
+  test() {
+    return new Promise(function (resolve, reject) {
+      navigator.geolocation.getCurrentPosition(resolve, reject);
+    });
+  }
+
+  getPosition() {
+    console.log('Getting position');
+    let promise = new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          this.location = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
+          resolve(this.location);
+        },
+        () => {
+          reject('Position could not be determined.');
+        },
+        {
+          enableHighAccuracy: true
+        }
+      );
+    });
+    return promise;
   }
 
 }
