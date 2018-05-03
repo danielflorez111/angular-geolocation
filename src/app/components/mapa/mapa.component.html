@@ -12,7 +12,7 @@
 
       </agm-marker>
 
-      <agm-marker *ngFor="let device of nearbyDevices; let i = index" [latitude]="device.lat" [longitude]="device.lng">
+      <agm-marker *ngFor="let device of nearbyDevices; let i = index" [latitude]="device.lat" [longitude]="device.lng" [iconUrl]="icon">
 
         <agm-info-window>
           <strong> titulo </strong>
@@ -37,6 +37,10 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
+
+        <button mat-icon-button color="primary" (click)="setUserPosition()">
+          <mat-icon aria-label="Example icon-button with a heart icon">gps_fixed</mat-icon>
+        </button>
       </div>
 
       <div>
@@ -78,5 +82,3 @@
   </mat-card-content>
 
 </mat-card>
-
-<button (click)="setLocation();">set current position</button>

@@ -6,6 +6,7 @@ import { IDevice } from '../../interfaces/device.interface';
 import { ILocation } from '../../interfaces/location.interface';
 import { MapsAPILoader } from '@agm/core';
 import { MatTableDataSource } from '@angular/material';
+import { blueMarker } from '../../shared/utils';
 declare var google: any;
 
 
@@ -26,58 +27,23 @@ export class MapaComponent implements OnInit {
   displayedColumns = ['title', 'lat', 'lng', 'distance'];
   lat: number = 6.2250704;
   lng: number = -75.57404319999999;
+  icon = blueMarker;
 
   constructor(public snackBar: MatSnackBar, private _deviceService: DeviceService, private mapsAPILoader: MapsAPILoader) {
     this.devices = this._deviceService.getDevices();
-
-    // this.location = {
-    //   lat: this.lat,
-    //   lng: this.lng
-    // };
-
-    //this.setLocation();
-
-    // this.test().then((position) => {
-    //   console.log(position);
-    // }).catch((err) => {
-    //   console.log(err);
-    // });
-
-    // this.getPosition().then((position) => {
-    //   console.log("Esta es", this.location);
-    // });
-
   }
 
   ngOnInit() {
     this.mapsAPILoader.load().then(() => {
-      this.getPosition().then((position) => {
-        console.log("Esta es", this.location);
-        this.calculateDistances();
-        this.updateDevices();
-      });
+      this.setUserPosition();
     });
   }
 
-  setLocation(location?: ILocation) {
-    if (!location && navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        this.location = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        };
-      });
-    } else {
-      this.location = {
-        lat: location.lat,
-        lng: location.lng
-      };
-    }
-  }
-
   dragEnd(event) {
-    console.log(event);
-    this.setLocation(event.coords);
+    this.location = {
+      lat: event.coords.lat,
+      lng: event.coords.lng
+    };
     this.calculateDistances();
     this.updateDevices();
   }
@@ -101,15 +67,14 @@ export class MapaComponent implements OnInit {
     this.updateDevices();
   }
 
-
-  test() {
-    return new Promise(function (resolve, reject) {
-      navigator.geolocation.getCurrentPosition(resolve, reject);
+  setUserPosition() {
+    this.getUserPosition().then((position) => {
+      this.calculateDistances();
+      this.updateDevices();
     });
   }
 
-  getPosition() {
-    console.log('Getting position');
+  getUserPosition() {
     let promise = new Promise((resolve, reject) => {
       navigator.geolocation.getCurrentPosition(
         (position) => {
