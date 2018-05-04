@@ -27,15 +27,20 @@ export class MapaComponent implements OnInit {
   lat: number = 6.2250704;
   lng: number = -75.57404319999999;
   icon = blueMarker;
+  loading: boolean = true;
 
-  constructor(public snackBar: MatSnackBar, private _deviceService: DeviceService, private mapsAPILoader: MapsAPILoader) {
+  constructor(
+    public snackBar: MatSnackBar,
+    private _deviceService: DeviceService,
+    private mapsAPILoader: MapsAPILoader
+  ) {
     this.devices = this._deviceService.getDevices();
   }
 
   ngOnInit() {
-    this.mapsAPILoader.load().then(() => {
-      this.setUserPosition();
-    });
+    this.mapsAPILoader
+      .load()
+      .then(() => this.setUserPosition());
   }
 
   dragEnd(event) {
@@ -48,9 +53,10 @@ export class MapaComponent implements OnInit {
   }
 
   calculateDistances() {
-    this.devices.map((device) => {
-      let deviceLocation = new google.maps.LatLng(device.lat, device.lng);
-      let currentLocation = new google.maps.LatLng(this.location.lat, this.location.lng);
+    const currentLocation = new google.maps.LatLng(this.location.lat, this.location.lng);
+    
+    this.devices.forEach((device) => {
+      const deviceLocation = new google.maps.LatLng(device.lat, device.lng);
       device.distance = google.maps.geometry.spherical.computeDistanceBetween(deviceLocation, currentLocation);
     });
   }
@@ -59,6 +65,7 @@ export class MapaComponent implements OnInit {
     this.nearbyDevices = this.devices.filter(device => device.distance <= this.radius);
     this.farDevices = this.devices.filter(device => device.distance > this.radius);
     this.farDevices.sort((a, b) => a.distance - b.distance);
+    // Create the table with far devices
     this.dataSource = new MatTableDataSource(this.farDevices);
   }
 
@@ -68,30 +75,42 @@ export class MapaComponent implements OnInit {
   }
 
   setUserPosition() {
-    this.getUserPosition().then((position) => {
-      this.calculateDistances();
-      this.updateDevices();
-    });
+    this.getUserPosition()
+      .then((userPosition: ILocation) => {
+
+        this.location = {
+          lat: userPosition.lat,
+          lng: userPosition.lng
+        };
+        
+        this.calculateDistances();
+        this.updateDevices();
+
+        this.loading = false;
+      })
+      .catch(() => {
+        this.loading = false;
+      });
   }
 
   getUserPosition() {
-    let promise = new Promise((resolve, reject) => {
+    const promise = new Promise((resolve, reject) => {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          this.location = {
+          const location = {
             lat: position.coords.latitude,
             lng: position.coords.longitude
           };
-          resolve(this.location);
+          
+          resolve(location);
         },
-        () => {
-          reject('Position could not be determined.');
-        },
+        () => reject('Position could not be determined.'),
         {
           enableHighAccuracy: true
         }
       );
     });
+    
     return promise;
   }
 

@@ -1,6 +1,6 @@
 <mat-card>
 
-  <mat-card-content *ngIf="location">
+  <mat-card-content *ngIf="!loading && location">
 
     <agm-map [latitude]="location.lat" [longitude]="location.lng" [zoom]="16">
 
@@ -30,7 +30,12 @@
 
       <div>
         <mat-form-field>
-          <mat-select placeholder="Select radius" name="radius" [(ngModel)]="radius" (change)="onChange($event.value)">
+          <mat-select
+            placeholder="Select radius"
+            name="radius"
+            [(ngModel)]="radius"
+            (change)="onChange($event.value)"
+          >
             <mat-option *ngFor="let opt of radiusOpts" [value]="opt">
               {{ opt }} m
             </mat-option>
@@ -43,7 +48,14 @@
       </div>
 
       <div>
-        <mat-slide-toggle (change)="toggle($event)" color="primary">Slide me!</mat-slide-toggle>
+        <mat-slide-toggle
+          (change)="toggle($event)"
+          color="primary"
+        >
+          <strong>Viewing: </strong>
+          <span *ngIf="slideState">Active devices</span>
+          <span *ngIf="!slideState">Inactive devices</span>
+        </mat-slide-toggle>
 
         <h2 class="title">Non access devices</h2>
 
@@ -80,6 +92,18 @@
 
     </div>
 
+  </mat-card-content>
+
+  <mat-card-content *ngIf="!loading && !location">
+    <h2>
+      This app needs your location to work. Please enable it!
+    </h2>
+  </mat-card-content>
+
+  <mat-card-content *ngIf="loading">
+    <h2>
+      Loading...
+    </h2>
   </mat-card-content>
 
 </mat-card>
