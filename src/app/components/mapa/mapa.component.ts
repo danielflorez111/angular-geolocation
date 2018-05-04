@@ -61,12 +61,13 @@ export class MapaComponent implements OnInit {
       const deviceLocation = new google.maps.LatLng(device.lat, device.lng);
       device.distance = google.maps.geometry.spherical.computeDistanceBetween(deviceLocation, currentLocation);
     });
+    
+    this.devices.sort((a, b) => a.distance - b.distance);
   }
 
   updateDevices() {
     this.nearbyDevices = this.devices.filter(device => device.distance <= this.radius);
     this.farDevices = this.devices.filter(device => device.distance > this.radius);
-    this.farDevices.sort((a, b) => a.distance - b.distance);
     // Create the table with far devices
     this.dataSource = new MatTableDataSource(this.farDevices);
   }

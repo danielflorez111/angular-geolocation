@@ -21,7 +21,7 @@ export class DeviceService {
   }
 
   getDevices() {
-    return this.devices;
+    return this.devices.filter((device) => device.active == true);
   }
 
 }
