@@ -49,6 +49,7 @@
 
       <div>
         <mat-slide-toggle
+          [checked]="slideState"
           (change)="toggle($event)"
           color="primary"
         >
@@ -57,7 +58,19 @@
           <span *ngIf="!slideState">Inactive devices</span>
         </mat-slide-toggle>
 
-        <h2 class="title">Non access devices</h2>
+        <h2
+          class="title"
+          *ngIf="slideState"
+        >
+          Access devices
+        </h2>
+
+        <h2
+          class="title"
+          *ngIf="!slideState"
+        >
+          Non access devices
+        </h2>
 
         <mat-table #table [dataSource]="dataSource">
 

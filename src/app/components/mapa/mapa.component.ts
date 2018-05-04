@@ -28,6 +28,7 @@ export class MapaComponent implements OnInit {
   lng: number = -75.57404319999999;
   icon = blueMarker;
   loading: boolean = true;
+  slideState = false;
 
   constructor(
     public snackBar: MatSnackBar,
@@ -50,6 +51,7 @@ export class MapaComponent implements OnInit {
     };
     this.calculateDistances();
     this.updateDevices();
+    this.slideState = false;
   }
 
   calculateDistances() {
@@ -72,6 +74,7 @@ export class MapaComponent implements OnInit {
   onChange(radius) {
     this.radius = radius;
     this.updateDevices();
+    this.slideState = false;
   }
 
   setUserPosition() {
@@ -87,6 +90,7 @@ export class MapaComponent implements OnInit {
         this.updateDevices();
 
         this.loading = false;
+        this.slideState = false;
       })
       .catch(() => {
         this.loading = false;
@@ -116,10 +120,11 @@ export class MapaComponent implements OnInit {
 
   toggle(event) {
     if (event.checked) {
+      this.slideState = true;
       this.dataSource = new MatTableDataSource(this.nearbyDevices);
     } else {
+      this.slideState = false;  
       this.dataSource = new MatTableDataSource(this.farDevices);
     }
   }
-
 }
